@@ -34,6 +34,8 @@ class AdminController extends Controller
          return view('Admin.Pages.admin.feedback', compact('feedbacks'));
     }
 
+    // hsbjhbd
+
 
 }
 
