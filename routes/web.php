@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\VerificationController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\CartController;
 
 
 Route::get('/', function () {
@@ -41,6 +42,8 @@ Route::prefix('admin')->middleware(['admin', 'verified'])->group(function () {
     Route::resource('/menu', MenuController::class);
 });
 
+Route::get('/admin/pages/feedback', [AdminController::class, 'showFeedback'])->name('admin.pages.feedback');
+
 Route::get('/admin/logout', [AdminController::class, 'adminLogout'])->name('admin.logout');
 
 Route::get('/email/verify', [VerificationController::class, 'show'])
@@ -54,17 +57,17 @@ Route::post('/email/resend', [VerificationController::class, 'resend'])
 
 Auth::routes(['verify' => true]);
 Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/category', 'App\Http\Controllers\MenuController@category')->name('category');
 Route::get('/appetizers', [MenuController::class, 'showAppetizers'])->name('appetizers');
 Route::get('/desserts', [MenuController::class, 'showDesserts'])->name('desserts');
 Route::get('/drinks', [MenuController::class, 'showDrinks'])->name('drinks');
 Route::get('/entree', [MenuController::class, 'showEntree'])->name('entree');
 Route::get('/salads', [MenuController::class, 'showSalads'])->name('salads');
-Route::get('/combos', [MenuController::class, 'showCombos'])->name('combos');
 
-Route::get('/User/Layouts/Menu/category', [MenuController::class, 'category'])->name('user.menu.category');
-Route::get('/cart', 'App\Http\Controllers\CartController@cart')->name('cart');
-Route::get('/add-to-cart/{id}', 'App\Http\Controllers\CartController@addToCart')->name('add-cart');
-Route::get('/remove/{id}', 'App\Http\Controllers\CartController@removeFromCart')->name('remove');
+Route::resource('cart', CartController::class);
+
+
+
 
 
 

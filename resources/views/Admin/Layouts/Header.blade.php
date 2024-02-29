@@ -55,8 +55,6 @@
             </label>
 
             <div class="header-menu">
-                <!-- Removed search and notification icons -->
-
                 <div class="user" id="logoutUser">
                     <div class="bg-img" style="background-image: url(img/1.jpeg)"></div>
 
@@ -64,11 +62,12 @@
                     <span>Logout</span>
                 </div>
 
-                <a href="{{ route('home') }}" class="user" id="backToHome">
+                <a href="{{ route('home') }}" class="user" id="backToHome" style="color: white;">
                     <div class="bg-img" style="background-image: url(img/1.jpeg)"></div>
                     <span class="las la-power-off" id="back"></span>
                     <span>Back to Home</span>
                 </a>
+
             </div>
         </div>
     </header>

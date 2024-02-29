@@ -35,6 +35,12 @@
                         <small>Menu</small>
                     </a>
                 </li>
+                <li>
+                    <a href="{{ route('admin.pages.feedback') }}">
+                        <span class="las la-glasses"></span>
+                        <small>See Feedbacks</small>
+                    </a>
+                </li>
             </ul>
         </div>
     </div>

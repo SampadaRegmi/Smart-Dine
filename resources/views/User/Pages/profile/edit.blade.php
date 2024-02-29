@@ -1,12 +1,6 @@
 @extends('User.Layouts.headerfooter')
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="{{ asset('User/Profile/style.css') }}">
-</head>
+@section('content')
+<link rel="stylesheet" href="{{ asset('User/Profile/style.css') }}">
 <style>
     .modal {
         display: none;
@@ -63,9 +57,7 @@
     .toggle-password:hover {
         color: #000;
     }
-
 </style>
-<body>
     <div class="wrapper">
         <form method="POST" action="{{ route('user.updateProfile', $user->id) }}" enctype="multipart/form-data">
             @method('PUT')
@@ -194,6 +186,4 @@
             window.location.href = '{{ route('home') }}';
         }
     </script>
-
-</body>
-</html>
+@endsection

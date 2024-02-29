@@ -1,33 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+@extends('User.Layouts.headerfooter')
+@section('content')
     <link rel="stylesheet" href="{{ asset('style.css') }}">
     <title>Contact Us</title>
     <style>
-        /* Reset some default styles */
-        body, h1, h2, h3, p, ul {
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'Arial', sans-serif;
-        }
-
-        /* Global styles */
         .container {
             max-width: 1200px;
             margin: 0 auto;
-        }
-
-        /* Header styles */
-        header {
-            background-color: #333;
-            color: white;
-            padding: 10px 0;
         }
 
         /* Contact section styles */
@@ -83,14 +61,6 @@
             cursor: pointer;
         }
 
-        /* Footer styles */
-        footer {
-            background-color: #333;
-            color: white;
-            padding: 20px 0;
-            text-align: center;
-        }
-
         .dialog-box {
             display: none;
             position: fixed;
@@ -115,13 +85,10 @@
             }
         }
     </style>
-</head>
-<body>
-    @include('User.Layouts.headerfooter')
     <section id="contact">
         <!-- Phone number and address -->
         <div>
-            <h1>Contact Us</h1>
+            <h1>Feedback</h1>
             <img src="{{ asset('Images/connect.png') }}" alt="connect">
             <h3>Phone: <span>987-654-4310</span></h3>
             <h3>Email: <span>abc@xyz.com</span></h3>
@@ -174,5 +141,4 @@
         });
     </script>
     <script src="{{ asset('index.js') }}"></script>
-</body>
-</html>
+@endsection

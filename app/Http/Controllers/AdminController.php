@@ -31,11 +31,8 @@ class AdminController extends Controller
          $admin = Auth::user();
          $feedbacks = Feedback::all();
 
-         return view('Admin.Pages.admin.feedback', compact('feedbacks'));
+         return view('Admin.Pages.feedback', compact('feedbacks'));
     }
-
-    // hsbjhbd
-
 
 }
 

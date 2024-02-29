@@ -195,10 +195,4 @@ class UserController extends Controller
 
         return redirect()->back()->with('success', 'Feedback submitted successfully!');
     }
-
-    public function cartPage() {
-        return view('User.Layouts.cart');
-    }
-    
-
 }

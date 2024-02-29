@@ -23,10 +23,10 @@
     </script>
     <style>
         body {
-            margin: 0;
+            margin: 80px 0 0;
             padding: 0;
             font-family: Arial, sans-serif;
-            overflow: hidden; /* Prevents unnecessary scrollbar */
+            overflow: auto;
         }
 
         nav {
@@ -34,7 +34,11 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 20px; /* Add padding for better spacing */
+            width: 100%; 
+            padding: 0 20px;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
         }
 
         nav a {
@@ -117,6 +121,51 @@
             color: #fff;
             padding: 20px 0;
         }
+        
+        .container-2 {
+            max-width: 960px;
+            margin: 0 auto;
+        }
+        
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        
+        .col-md-4 {
+            width: 33.33%;
+            color: black;
+        }
+        
+        h4 {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+        
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        li {
+            margin-bottom: 10px;
+        }
+
+        a{
+            color: black;
+            text-decoration: none;
+        }
+        
+        hr {
+            border-top: 1px solid #fff;
+            margin: 15px 0;
+        }
+
+        p{
+            color: black;
+            margin: 5px;
+        }
 
         /* Responsive adjustments */
         @media only screen and (min-width: 768px) { /*Desktop*/
@@ -142,31 +191,52 @@
     <header>
         <nav>
             <h1 class="text-logo">Smart Dine</h1>
-                <a href="{{ route('home') }}">Home</a>
-                <!-- In your blade file -->
-                <a href="{{ route('user.menu.category') }}">Menu</a>
-                <a href="{{ route('cart') }}">Cart</a>
-                    <div class="dropdown" id="profileDropdown">
-                        <span class="dropdown-label">Profile</span>
-                        <div class="dropdown-content">
-                            <a href="{{ route('user.editProfile') }}">Edit Profile</a>
-
-                            <!-- Admin Panel link for admin users -->
-                            @if (Auth::user()->role == 'admin')
-                                <a href="{{ route('admin.dashboard') }}">Admin Panel</a>
-                            @endif
-
-                            <!-- Logout form -->
-                            <form class="logout-form" action="{{ route('logout') }}" method="POST" id="logoutForm">
-                                @csrf
-                                <button type="submit" style="background: none; border: none; cursor: pointer; color: white;">Logout</button>
-                            </form>
-                            <!-- End of Logout form -->
-                        </div>
-                    </div>
+            <a href="{{ route('home') }}">Home</a>
+            <a href="{{ route('category') }}">Menu</a>
+            <a href="{{ route('cart.index') }}">Cart</a>
+            <div class="dropdown" id="profileDropdown">
+                <span class="dropdown-label">Profile</span>
+                <div class="dropdown-content">
+                    <a href="{{ route('user.editProfile') }}">Edit Profile</a>
+                    @if (Auth::user()->role == 'admin')
+                        <a href="{{ route('admin.dashboard') }}">Admin Panel</a>
+                    @endif
+                    <form class="logout-form" action="{{ route('logout') }}" method="POST" id="logoutForm">
+                        @csrf
+                        <button type="submit" style="background: none; border: none; cursor: pointer; color: white;">Logout</button>
+                    </form>
                 </div>
             </div>
         </nav>
     </header>
+    <div class="content">
+        @yield('content')
+    </div>
+    <footer>
+    <div class="container-2">
+          <div class="row">
+            <div class="col-md-4">
+              <h4>Location</h4>
+              <p>Itahari, Sunsari</p>
+              <p>Itahari, Sunsari</p>
+            </div>
+            <div class="col-md-4">
+              <h4>Contact Us</h4>
+              <p>Email: snehalamakarki27@gmail.com</p>
+              <p>Phone: +977 9800996911</p>
+            </div>
+            <div class="col-md-4">
+              <h4>Follow Us</h4>
+              <ul>
+                <li><a href="#">Facebook</a></li>
+                <li><a href="#">Tiktok</a></li>
+                <li><a href="#">Instagram</a></li>
+              </ul>
+            </div>
+          </div>
+          <hr>
+          <p>&copy; 2023 FitFusion. All rights reserved.</p>
+        </div>
+    </footer>
 </body>
 </html>

@@ -1,9 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta charset="UTF-8">
+@extends('User.Layouts.headerfooter')
+@section('content')
     <title>Home </title>
     <style>
         h1,
@@ -306,9 +302,6 @@
             color: #fff;
         }
     </style>
-</head>
-<body>
-@include('User.Layouts.headerfooter')
     <section class="about-section">
         <div class="container">
             <div class="row">
@@ -329,7 +322,7 @@
                             it covers a diverse range of features.
                         </div>
                         <div class="btn-box">
-                            <a href="{{ route('contact.showForm') }}" class="theme-btn btn-style-one">Contact Us</a>
+                            <a href="{{ route('contact.showForm') }}" class="theme-btn btn-style-one">Leave Remarks</a>
                         </div>
                     </div>
                 </div>
@@ -365,5 +358,4 @@
             </div>
         </div>
     </section>
-</body>
-</html>
+@endsection
