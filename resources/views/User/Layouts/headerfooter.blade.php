@@ -186,6 +186,23 @@
             }
         }
     </style>
+    <script>
+        function validateSearch() {
+            // Get the value of the keywords input
+            var keywordsInput = document.getElementById('keywords');
+            var keywordsValue = keywordsInput.value.trim();
+
+            // Check if the search box is empty
+            if (keywordsValue === '') {
+                // Prevent form submission if the search box is empty
+                alert('Please enter something in the search box');
+                return false;
+            }
+
+            // Allow form submission if the search box is not empty
+            return true;
+        }
+    </script>
 </head>
 <body>
     <header>
@@ -194,6 +211,11 @@
             <a href="{{ route('home') }}">Home</a>
             <a href="{{ route('category') }}">Menu</a>
             <a href="{{ route('cart.index') }}">Cart</a>
+            <form id="searchForm" method="post" action="{{ route('menu.search') }}">
+                @csrf
+                <input type="text" name="keywords" id="keywords">
+                <button type="submit" id="searchButton" onclick="return validateSearch()">Search</button>
+            </form>
             <div class="dropdown" id="profileDropdown">
                 <span class="dropdown-label">Profile</span>
                 <div class="dropdown-content">
@@ -217,13 +239,12 @@
           <div class="row">
             <div class="col-md-4">
               <h4>Location</h4>
-              <p>Itahari, Sunsari</p>
-              <p>Itahari, Sunsari</p>
+              <p>Biratnagar-3, DDC</p>
             </div>
             <div class="col-md-4">
               <h4>Contact Us</h4>
-              <p>Email: snehalamakarki27@gmail.com</p>
-              <p>Phone: +977 9800996911</p>
+              <p>Email: sampadaregmi90@gmail.com</p>
+              <p>Phone: +977 9861906534</p>
             </div>
             <div class="col-md-4">
               <h4>Follow Us</h4>
@@ -235,7 +256,7 @@
             </div>
           </div>
           <hr>
-          <p>&copy; 2023 FitFusion. All rights reserved.</p>
+          <p>&copy; 2024 Smart Dine. All rights reserved.</p>
         </div>
     </footer>
 </body>

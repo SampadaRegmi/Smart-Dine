@@ -174,4 +174,19 @@ class MenuController extends Controller
         return view('menu')->with('menuItems', $menuItems);
     }
 
+    public function search(Request $request)
+    {
+        $keywords = $request->input('keywords');
+
+        // Use where clause to search for keywords in name or description
+        $menuItems = Menu::where('name', 'like', '%' . $keywords . '%')
+                        ->orWhere('description', 'like', '%' . $keywords . '%')
+                        ->orWhere('CourseCategory', 'like', '%' . $keywords . '%')
+                        ->orWhere('FoodCategory', 'like', '%' . $keywords . '%')
+                        ->get();
+
+        return view('User.Layouts.Menu.category', compact('menuItems'));
+    }
+
+
 }

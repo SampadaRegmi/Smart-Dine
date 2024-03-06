@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CartController;
-
+use App\Http\Controllers\PaymentController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -63,11 +63,16 @@ Route::get('/desserts', [MenuController::class, 'showDesserts'])->name('desserts
 Route::get('/drinks', [MenuController::class, 'showDrinks'])->name('drinks');
 Route::get('/entree', [MenuController::class, 'showEntree'])->name('entree');
 Route::get('/salads', [MenuController::class, 'showSalads'])->name('salads');
+Route::post('/menu/search', [MenuController::class, 'search'])->name('menu.search');
 
-Route::resource('cart', CartController::class);
+Route::middleware('auth')->group(function () {
+    Route::resource('cart', CartController::class);
+    Route::get('/payment', [PaymentController::class, 'index'])->name('payment.index');
+});
 
-
-
+// web.php
+Route::post('/khalti/payment/verify', [PaymentController::class, 'verifyPayment'])->name('khalti.verifyPayment');
+Route::post('/khalti/payment/store', [PaymentController::class, 'storePayment'])->name('khalti.storePayment');
 
 
 

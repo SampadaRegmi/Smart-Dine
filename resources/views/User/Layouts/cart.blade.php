@@ -44,7 +44,7 @@
                     </table>
                     <div>
                         <p>Total: Rs.{{ $total }}</p>
-                        <!-- You can add additional content here, such as a checkout button -->
+                        <a href="{{ route('payment.index') }}" class="btn btn-success">Proceed to Checkout</a>
                     </div>
                 </div>
             </div>

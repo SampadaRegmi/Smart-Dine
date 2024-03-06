@@ -59,7 +59,7 @@
             @foreach($menuItems as $menuItem)
                 <div class="col-sm-4 mt-4">
                     <div class="card border border-dark h-100">
-                        <img src="{{ $menuItem->image }}" alt="" class="card-img-top align-items-center" style="width: 100%; height: 225px;">
+                        <img src="{{asset( $menuItem->image) }}" alt="Menu Image" class="card-img-top align-items-center" style="width: 100%; height: 225px;">
                         <div class="card-body d-flex flex-column align-items-start">
                             <h5 class="fw-bold card-text rounded p-1" style='background-color:rgba(247, 81, 81, 0.419);'>{{ $menuItem->name }}</h5>
                             <p class="card-text"> Rs.{{ $menuItem->price }}</p>

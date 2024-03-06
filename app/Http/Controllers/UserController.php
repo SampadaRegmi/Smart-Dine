@@ -8,6 +8,8 @@ use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Cart;
+use App\Models\Checkout;
 
 
 class UserController extends Controller
@@ -194,5 +196,11 @@ class UserController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Feedback submitted successfully!');
+    }
+
+    public function checkout()
+    {
+        $carts = Cart::where('user_id', Auth::user()->id)->get();
+        return view('User.Layouts.checkout', compact('carts'));
     }
 }

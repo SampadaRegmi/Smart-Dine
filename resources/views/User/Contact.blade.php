@@ -106,12 +106,17 @@
                 <textarea name="text" class="form-input" placeholder="Feedback"></textarea>
                 <button type="submit" class="button-submit">Submit</button>
             </form>
-        </div>
-        <div id="successDialog" class="dialog-box">
-            <p>Thank you for your feedback!</p>
+            <!-- Warning and Success Dialog -->
+            <div id="warningDialog" class="dialog-box" style="color: red; display: none;">
+                <p>Please fill in all the fields.</p>
+            </div>
+            <div id="successDialog" class="dialog-box" style="color: green; display: none;">
+                <p>Thank you for your feedback!</p>
+            </div>
         </div>
     </section>
     <!-- Include jQuery (if not already included) -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script>
         $(document).ready(function() {
             $('#feedbackForm').submit(function(event) {
@@ -121,6 +126,21 @@
                 // Reference to the form
                 var form = $(this);
 
+                // Check if any field is empty
+                var hasEmptyField = false;
+                form.find('.form-input').each(function() {
+                    if ($(this).val() === '') {
+                        hasEmptyField = true;
+                        return false; // Exit the loop early
+                    }
+                });
+
+                if (hasEmptyField) {
+                    // Display warning dialog for empty fields
+                    $('#warningDialog').css('display', 'block');
+                    return; // Stop further processing
+                }
+
                 // Perform an AJAX request to submit the form data
                 $.ajax({
                     url: form.attr('action'),
@@ -129,8 +149,6 @@
                     success: function(response) {
                         // Display the success dialog
                         $('#successDialog').css('display', 'block');
-
-                        // You can optionally redirect the user or perform other actions here
                     },
                     error: function(error) {
                         console.log(error);
