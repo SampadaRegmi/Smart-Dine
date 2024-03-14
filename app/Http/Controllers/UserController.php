@@ -201,6 +201,6 @@ class UserController extends Controller
     public function checkout()
     {
         $carts = Cart::where('user_id', Auth::user()->id)->get();
-        return view('User.Layouts.checkout', compact('carts'));
+        return view('User.Checkout', compact('carts'));
     }
 }

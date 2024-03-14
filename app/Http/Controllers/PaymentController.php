@@ -3,12 +3,27 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Order;
+use App\Models\Cart;
+use App\Models\OrderItem;
 
 class PaymentController extends Controller
 {
     public function index()
     {
-        return view('User.Layouts.Payment');
+        $user = auth()->user();
+        
+        // Retrieve the latest order for the user
+        $latestOrder = Order::where('user_id', $user->id)->latest()->first();
+
+        // Check if there is a latest order
+        if ($latestOrder) {
+            $total = $latestOrder->total_amount;
+        } else {
+            $total = 0; // Set a default value if no order is found
+        }
+
+        return view('User.Layouts.Payment', compact('total'));
     }
 
     public function verifyPayment(Request $request)
@@ -41,6 +56,22 @@ class PaymentController extends Controller
 
     public function storePayment(Request $request)
     {
-        #database maa store garne
+        $orderId = $request->input('order_id'); 
+
+        // Validate that the order_id is present and numeric
+        if (!$orderId || !is_numeric($orderId)) {
+            return redirect()->route('orders.index')->with('error', 'Invalid order ID!');
+        }
+
+        $order = Order::find($orderId);
+
+        if (!$order) {
+            return redirect()->route('orders.index')->with('error', 'Order not found!');
+        }
+
+        $order->payment_status = true;
+        $order->save();
+
+        return redirect()->route('orders.index')->with('success', 'Order successful!');
     }
 }

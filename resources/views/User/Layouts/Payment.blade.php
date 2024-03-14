@@ -6,6 +6,9 @@
     <title>Document</title>
     <script src="https://khalti.s3.ap-south-1.amazonaws.com/KPG/dist/2020.12.17.0.0.0/khalti-checkout.iffe.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script> 
+        var cartAmount = Math.round({{ $total ?? 0 }} * 100);
+    </script>
 </head>
 <body>
     <button id="payment-button">Pay with Khalti</button>
@@ -65,7 +68,7 @@
         var checkout = new KhaltiCheckout(config);
         var btn = document.getElementById("payment-button");
         btn.onclick = function () {
-            checkout.show({ amount: 1000 });
+            checkout.show({ amount: cartAmount });
         }
     </script>
 </body>

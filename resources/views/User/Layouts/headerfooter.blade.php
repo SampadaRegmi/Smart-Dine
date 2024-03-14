@@ -220,6 +220,7 @@
                 <span class="dropdown-label">Profile</span>
                 <div class="dropdown-content">
                     <a href="{{ route('user.editProfile') }}">Edit Profile</a>
+                    <li><a href="{{ route('orders.index') }}">Orders</a></li>
                     @if (Auth::user()->role == 'admin')
                         <a href="{{ route('admin.dashboard') }}">Admin Panel</a>
                     @endif

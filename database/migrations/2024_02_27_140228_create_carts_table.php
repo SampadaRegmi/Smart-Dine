@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained();
             $table->integer('quantity')->default(0);
             $table->string('image')->nullable();
-            $table->decimal('price', 10, 2);
+            $table->decimal('price', 10, 2)->default(0.00);;
             $table->timestamps();
         });
     }

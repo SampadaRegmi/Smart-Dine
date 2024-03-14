@@ -19,11 +19,16 @@ class Cart extends Model
     // Define relationships if needed
     public function menu()
     {
-        return $this->belongsTo(Menu::class, 'menu_id');
+        return $this->belongsTo(Menu::class);
     }
 
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+    
+    public function order()
+    {
+        return $this->hasOne(Order::class);
     }
 }

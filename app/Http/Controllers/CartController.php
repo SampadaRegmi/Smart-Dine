@@ -9,16 +9,28 @@ use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
-
     public function index()
     {
         $carts = Cart::where('user_id', auth()->id())->get();
-        return view('User.Layouts.cart', compact('carts'));
+
+        // Calculate the total amount
+        $total = $this->calculateTotal($carts);
+
+        return view('User.Layouts.cart', compact('carts', 'total'));
     }
 
-    public function create()
+    // ... (other methods)
+
+    // Helper method to calculate total amount
+    private function calculateTotal($carts)
     {
-        //
+        $total = 0;
+
+        foreach ($carts as $cart) {
+            $total += $cart->price * $cart->quantity;
+        }
+
+        return $total;
     }
 
     public function store(Request $request)
