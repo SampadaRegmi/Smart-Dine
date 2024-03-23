@@ -159,5 +159,21 @@ class OrderController extends Controller
             return back()->with('error', 'Failed to submit review: ' . $e->getMessage());
         }
     } 
+
+    public function updatePaymentStatus(Request $request, $orderId)
+    {
+        $order = Order::find($orderId);
+        if ($order) {
+            // Process payment logic here
+            $order->payment_status = 'paid';
+            $order->save();
+
+            // Other logic...
+
+            return redirect()->back()->with('success', 'Payment processed successfully.');
+        } else {
+            return redirect()->back()->with('error', 'Order not found.');
+        }
+    }
         
 }

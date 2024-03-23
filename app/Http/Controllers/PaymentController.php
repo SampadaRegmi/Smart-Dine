@@ -81,4 +81,16 @@ class PaymentController extends Controller
 
         return redirect()->route('orders.index')->with('success', 'Order successful!');
     }
+
+    public function processPayment(Request $request, $orderId)
+    {
+        $order = Order::findOrFail($orderId);
+        
+        // Update payment status to "Paid"
+        $order->update(['payment_status' => 'Paid']);
+
+        // Add any additional payment processing logic here
+        
+        return redirect()->route('order.show', $orderId)->with('success', 'Payment processed successfully.');
+    }
 }

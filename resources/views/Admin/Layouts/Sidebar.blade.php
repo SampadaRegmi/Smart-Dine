@@ -35,12 +35,35 @@
                         <small>Menu</small>
                     </a>
                 </li>
+
+                <li>
+                    <a href="{{ route('admin.pages.userOrders') }}">
+                        <span class="las la-pizza-slice"></span>
+                        <small>Orders</small>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ route('admin.pages.userCart') }}">
+                        <span class="las la-shopping-cart"></span>
+                        <small>Cart</small>
+                    </a>
+                </li>
+
                 <li>
                     <a href="{{ route('admin.pages.feedback') }}">
                         <span class="las la-glasses"></span>
                         <small>See Feedbacks</small>
                     </a>
                 </li>
+
+                <li>
+                    <a href="{{ route('admin.pages.userRatings') }}">
+                        <span class="las la-star"></span>
+                        <small>Ratings</small>
+                    </a>
+                </li>
+
             </ul>
         </div>
     </div>

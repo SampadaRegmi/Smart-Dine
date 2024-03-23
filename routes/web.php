@@ -47,6 +47,15 @@ Route::prefix('admin')->middleware(['admin', 'verified'])->group(function () {
 });
 
 Route::get('/admin/pages/feedback', [AdminController::class, 'showFeedback'])->name('admin.pages.feedback');
+Route::get('/admin/pages/userCart', [AdminController::class, 'userCart'])->name('admin.pages.userCart');
+Route::get('/admin/pages/userOrders', [AdminController::class, 'userOrders'])->name('admin.pages.userOrders');
+Route::get('/admin/pages/userRatings', [AdminController::class, 'userRatings'])->name('admin.pages.userRatings');
+
+
+
+
+
+
 
 Route::get('/admin/logout', [AdminController::class, 'adminLogout'])->name('admin.logout');
 

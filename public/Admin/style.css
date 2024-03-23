@@ -29,6 +29,7 @@
     z-index: 100;
     background: var(--color-dark);
     transition: left 300ms;
+    overflow-y: auto;
 }
 
 .side-menu ul li:hover {

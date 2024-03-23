@@ -15,6 +15,7 @@ class Order extends Model
         'order_type',
         'total_amount',
         'order_details',
+        'payment_status',
     ];
 
     public function user()
@@ -41,5 +42,14 @@ class Order extends Model
     public function reviews()
     {
         return $this->hasMany(Review::class);
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($order) {
+            $order->payment_status = 'pending';
+        });
     }
 }
