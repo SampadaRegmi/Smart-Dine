@@ -15,7 +15,6 @@ class Order extends Model
         'order_type',
         'total_amount',
         'order_details',
-        'payment_status',
     ];
 
     public function user()
@@ -25,7 +24,7 @@ class Order extends Model
 
     public function menu()
     {
-        return $this->belongsTo(Menu::class);
+        return $this->belongsToMany(Menu::class);
     }
 
     public function menuItems()
@@ -38,13 +37,9 @@ class Order extends Model
         return $this->hasMany(OrderDetail::class);
     }
 
-    public function markAsPaid()
+   
+    public function reviews()
     {
-        // Mark the order as paid
-        $this->payment_status = true;
-        $this->save();
-
-        // Log the action
-        Log::info('Order marked as paid. Order ID: ' . $this->id);
+        return $this->hasMany(Review::class);
     }
 }

@@ -18,7 +18,6 @@ class CreateOrdersTable extends Migration
             $table->foreignId('user_id')->constrained();
             $table->enum('order_type', ['take_away', 'dine_in']);
             $table->decimal('total_amount', 10, 2);
-            $table->boolean('payment_status')->default(false);
             $table->json('order_details')->nullable();
             $table->timestamps();
         });
@@ -29,8 +28,16 @@ class CreateOrdersTable extends Migration
      *
      * @return void
      */
-    public function down()
+        public function down(): void
     {
+        // Drop foreign key constraints
+        Schema::table('reviews', function (Blueprint $table) {
+            $table->dropForeign(['order_id']);
+            $table->dropForeign(['menu_id']);
+            $table->dropForeign(['user_id']);
+        });
+
+        // Rollback the migration
         Schema::dropIfExists('orders');
     }
 };

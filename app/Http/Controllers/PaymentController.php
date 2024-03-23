@@ -6,12 +6,13 @@ use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\Cart;
 use App\Models\OrderItem;
+use Illuminate\Support\Facades\Auth;
 
 class PaymentController extends Controller
 {
     public function index()
     {
-        $user = auth()->user();
+        $user = Auth::user();
         
         // Retrieve the latest order for the user
         $latestOrder = Order::where('user_id', $user->id)->latest()->first();
@@ -19,12 +20,18 @@ class PaymentController extends Controller
         // Check if there is a latest order
         if ($latestOrder) {
             $total = $latestOrder->total_amount;
+            //$menu data is related to the latest order, retrieve it here
+            $order = $latestOrder; // Adjust this line based on your actual relationship
+            return view('User.Layouts.Payment', compact('total', 'order'));
+
         } else {
             $total = 0; // Set a default value if no order is found
+            $order = null; // Set $menu to null if no order is found
+
         }
 
-        return view('User.Layouts.Payment', compact('total'));
     }
+
 
     public function verifyPayment(Request $request)
     {

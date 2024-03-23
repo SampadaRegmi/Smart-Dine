@@ -20,5 +20,20 @@ class Menu extends Model
     {
         return $this->hasMany(Cart::class);
     }
+
+    public function orders()
+    {
+        return $this->belongsToMany(Order::class);
+    }
+
+    public function getAverageRatingAttribute()
+    {
+        return $this->reviews()->avg('rating');
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
     
 }

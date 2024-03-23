@@ -7,6 +7,8 @@ use App\Models\Menu;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use App\Models\Review;
+use Illuminate\Support\Facades\DB;
 
 class MenuController extends Controller
 {
@@ -170,8 +172,18 @@ class MenuController extends Controller
 
     public function showMenu()
     {
-        $menuItems = Menu::all(); // Retrieve menu items from the database
-        return view('menu')->with('menuItems', $menuItems);
+        // Retrieve menu items from the database with eager loading of reviews relationship
+        $menuItems = Menu::with('reviews')->get();
+        
+        // Calculate average rating for each menu item
+        $menuItems->transform(function ($menuItem) {
+            $totalReviews = $menuItem->reviews->count();
+            $totalRating = $menuItem->reviews->sum('rating');
+            $menuItem->averageRating = $totalReviews > 0 ? $totalRating / $totalReviews : 0;
+            return $menuItem;
+        });
+
+        return view('menu', compact('menuItems'));
     }
 
     public function search(Request $request)
@@ -188,5 +200,16 @@ class MenuController extends Controller
         return view('User.Layouts.Menu.category', compact('menuItems'));
     }
 
+    public function showReviews(Menu $menu)
+    {
+        // Retrieve the menu item corresponding to the given menu ID
+        $menuItem = $menu;
+
+        // Retrieve reviews for the given menu item
+        $reviews = $menu->reviews;
+
+        // Pass the menu item and reviews to the view
+        return view('orders.readReviews', compact('menuItem', 'reviews'));
+    }
 
 }

@@ -13,6 +13,9 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\OrderController;
 
+
+
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -70,22 +73,33 @@ Route::post('/menu/search', [MenuController::class, 'search'])->name('menu.searc
 // Cart routes
 Route::middleware('auth')->group(function () {
     Route::resource('cart', CartController::class);
-    Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
-    
+    Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.destroy');  
 });
+
+// Payment routes
+// Route::get('/payment', [PaymentController::class, 'index'])->name('payment.index');
+// Route::post('/process-payment', [PaymentController::class, 'processPayment'])->name('process.payment');
+// Route::post('/khalti/payment/verify', [PaymentController::class, 'verifyPayment'])->name('khalti.verifyPayment');
+// Route::post('/khalti/payment/store', [PaymentController::class, 'storePayment'])->name('khalti.storePayment');
+// Route::post('/update-payment-status', 'PaymentController@updatePaymentStatus');
+
+
+// Order routes
+Route::post('/orders/store-from-cart', [OrderController::class, 'storeFromCart'])->name('orders.storeFromCart');
+Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+Route::get('/orders/{orderId}/review', [OrderController::class, 'review'])->name('order.review');
+Route::post('/submit-review/{orderId}', [OrderController::class, 'submitReview'])->name('review.submit');
+Route::view('/order/success', 'orders.success')->name('order.success');
+Route::get('/menu/{menu}/reviews', [MenuController::class, 'showReviews'])->name('menu.reviews');
+
+
+
+
 
 // Payment routes
 Route::get('/payment', [PaymentController::class, 'index'])->name('payment.index');
 Route::post('/process-payment', [PaymentController::class, 'processPayment'])->name('process.payment');
 Route::post('/khalti/payment/verify', [PaymentController::class, 'verifyPayment'])->name('khalti.verifyPayment');
 Route::post('/khalti/payment/store', [PaymentController::class, 'storePayment'])->name('khalti.storePayment');
-
-// Order routes
-Route::post('/orders/store-from-cart', [OrderController::class, 'storeFromCart'])->name('orders.storeFromCart');
-Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
-
-
-
-
 
 

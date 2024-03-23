@@ -11,7 +11,7 @@ class CartController extends Controller
 {
     public function index()
     {
-        $carts = Cart::where('user_id', auth()->id())->get();
+        $carts = Cart::where('user_id', Auth::id())->get();
 
         // Calculate the total amount
         $total = $this->calculateTotal($carts);
@@ -31,6 +31,31 @@ class CartController extends Controller
         }
 
         return $total;
+    }
+
+    public function addToCart(Request $request)
+    {
+        $menuId = $request->input('menu_id');
+        $quantity = $request->input('quantity');
+
+        // Check if the item already exists in the cart
+        $existingCartItem = Cart::where('menu_id', $menuId)->first();
+
+        if ($existingCartItem) {
+            // If the item exists, increase the quantity and update the total price
+            $existingCartItem->quantity += $quantity;
+            $existingCartItem->price += ($quantity * $existingCartItem->menu->price);
+            $existingCartItem->save();
+        } else {
+            // If the item does not exist, create a new entry in the cart
+            $cartItem = new Cart();
+            $cartItem->menu_id = $menuId;
+            $cartItem->quantity = $quantity;
+            $cartItem->price = $quantity * $cartItem->menu->price;
+            $cartItem->save();
+        }
+
+        // Redirect back or return a response as needed
     }
 
     public function store(Request $request)

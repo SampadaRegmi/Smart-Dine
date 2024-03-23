@@ -10,6 +10,8 @@
         var cartAmount = Math.round({{ $total ?? 0 }} * 100);
     </script>
 </head>
+    <title>Payment</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 <body>
     <button id="payment-button">Pay with Khalti</button>
     <div id="success-message" style="display: none;">
@@ -18,9 +20,9 @@
     <script>
         var config = {
             "publicKey": "{{ config('app.khalti_public_key') }}",
-            "productIdentity": "1234567890",
-            "productName": "Dragon",
-            "productUrl": "http://gameofthrones.wikia.com/wiki/Dragons",
+            "productIdentity": "{{ $order->id }}",
+            "productName": " Dragon",
+            "productUrl": "productUrl: "{{ route('orders.index') }}",",
             "paymentPreference": ["KHALTI"],
             "eventHandler": {
                 onSuccess(payload) {
@@ -66,10 +68,13 @@
         };
 
         var checkout = new KhaltiCheckout(config);
-        var btn = document.getElementById("payment-button");
-        btn.onclick = function () {
+        function submit(){
+            console.log("hello");
             checkout.show({ amount: cartAmount });
         }
+        window.onload = submit;
+            
+        
     </script>
 </body>
 </html>
