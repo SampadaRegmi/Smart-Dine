@@ -11,7 +11,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-
+use App\Events\NewOrderPlaced;
+use App\Events\OrderCreated;
 
 class OrderController extends Controller
 {
@@ -25,64 +26,49 @@ class OrderController extends Controller
 
     public function storeFromCart(Request $request)
     {
-        try {
-            // Get the cart items for the current user
-            $carts = Cart::where('user_id', Auth::id())->get();
+        $carts = Cart::where('user_id', Auth::id())->get();
+        $sub_total = 0;
+        $discount = 0;
+        $totalAmount = 0;
+        $orderDetails = [];
 
-            // Check if the cart is empty
-            if ($carts->isEmpty()) {
-                return back()->with('error', 'Your cart is empty. Please add items to your cart.');
-            }
+        foreach ($carts as $cart) {
+            $sub_total += $cart->sub_total;
+            $discount += $cart->discount;
+            $totalAmount += $cart->total;
 
-            // Check if order type is selected
-            if (!$request->filled('order_type')) {
-                return back()->with('error', 'Please select an order type.');
-            }
-
-            // Calculate the total amount from the cart
-            $totalAmount = 0;
-
-            // Build order details array
-            $orderDetails = [];
-
-            foreach ($carts as $cart) {
-                $totalAmount += $cart->price * $cart->quantity;
-
-                $orderDetails[] = [
-                    'menu_id' => $cart->menu_id,
-                    'quantity' => $cart->quantity,
-                    'image' => $cart->image,
-                    'price' => $cart->price,
-                ];
-            }
-
-            // Create the order
-            $order = Order::create([
-                'user_id' => Auth::id(),
-                'order_type' => $request->input('order_type'),
-                'total_amount' => $totalAmount,
-                'payment_status' => false,
-                'order_details' => json_encode($orderDetails), // Store order details as JSON
-            ]);
-
-            // Remove the cart items
-            foreach ($carts as $cart) {
-                $cart->delete();
-            }
-
-            return redirect()->route('order.success', compact('order')); // Assuming 'order.success' route exists
-        } catch (\Exception $e) {
-            // Handle any exceptions that may occur during order creation
-            return back()->with('error', 'Failed to create order: ' . $e->getMessage());
+            $orderDetails[] = [
+                'menu_id' => $cart->menu_id,
+                'quantity' => $cart->quantity,
+                'image' => $cart->menu->image,
+                'price' => $cart->menu->price,
+            ];
         }
+
+        $order = Order::create([
+            'user_id' => Auth::id(),
+            'order_type' => $request->input('order_type'),
+            'sub_total' => $sub_total,
+            'discount' => $discount,
+            'total_amount' => $totalAmount,
+            'payment_status' => false,
+            'order_details' => json_encode($orderDetails),
+        ]);
+        event(new OrderCreated($order));
+
+        // Delete the carts after the order is created
+        $carts->each->delete();
+
+        return redirect()->route('order.success', compact('order'));
     }
+
 
     public function show($orderId)
     {
         try {
             // Retrieve the order along with its reviews
             $order = Order::with('reviews')->findOrFail($orderId);
-            
+
             // Pass the order to the view
             return view('orders.show', compact('order'));
         } catch (\Exception $e) {
@@ -94,20 +80,13 @@ class OrderController extends Controller
     public function review($orderId)
     {
         try {
-            // Fetch the order details
             $order = Order::findOrFail($orderId);
-            
-            // Fetch the menu associated with the order
-            $menu = $order->menuItems; // Assuming you have a relationship set up between orders and menu items
-            
-            // Fetch the currently authenticated user
+            $menu = $order->menuItems;
             $user = Auth::user();
-            
-            // Render the review page and pass the order details, menu, user, and orderId to the view
+
             return view('orders.review', compact('order', 'menu', 'user', 'orderId'));
         } catch (\Exception $e) {
-            // Handle any exceptions that may occur during fetching order for review
-            return back()->with('error', 'Failed to load order for review: ' . $e->getMessage());
+            return redirect()->route('orders.index')->with('error', 'Failed to load order for review: ' . $e->getMessage());
         }
     }
 
@@ -129,19 +108,19 @@ class OrderController extends Controller
             // Decode the JSON data in the order_details column to access menu items
             $orderDetails = json_decode($order->order_details, true);
 
-            // Check if order details exist and get the menu_id of the first item
-            $menuId = isset($orderDetails[0]['menu_id']) ? $orderDetails[0]['menu_id'] : null;
+            // Iterate over each item in the order and create a review for each item
+            foreach ($orderDetails as $item) {
+                // Create a new Review instance
+                $review = new Review();
+                $review->rating = $validatedData['star'];
+                $review->comment = $validatedData['comment'];
+                $review->menu_id = $item['menu_id']; // Use the menu_id of the current item
+                $review->user_id = Auth::id();
+                $review->order_id = $orderId; // Use the provided orderId
 
-            // Create a new Review instance
-            $review = new Review();
-            $review->rating = $validatedData['star'];
-            $review->comment = $validatedData['comment'];
-            $review->menu_id = $menuId;  // Use the menu_id of the first item
-            $review->user_id = Auth::id();
-            $review->order_id = $orderId; // Use the provided orderId
-
-            // Save the review to the database
-            $review->save();
+                // Save the review to the database
+                $review->save();
+            }
 
             // Commit the transaction
             DB::commit();
@@ -158,7 +137,8 @@ class OrderController extends Controller
             // Redirect back with error message
             return back()->with('error', 'Failed to submit review: ' . $e->getMessage());
         }
-    } 
+    }
+
 
     public function updatePaymentStatus(Request $request, $orderId)
     {
@@ -175,5 +155,11 @@ class OrderController extends Controller
             return redirect()->back()->with('error', 'Order not found.');
         }
     }
-        
+
+    public function notifications()
+    {
+        $notifications = auth()->user()->notifications()->paginate(10); // Paginate notifications
+
+        return view('Admin.Pages.notifications', compact('notifications'));
+    }
 }

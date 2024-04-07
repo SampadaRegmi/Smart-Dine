@@ -1,61 +1,21 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
 use App\Models\Cart;
 use App\Models\User;
 use App\Models\Menu;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
 
 class CartController extends Controller
 {
     public function index()
     {
         $carts = Cart::where('user_id', Auth::id())->get();
-
-        // Calculate the total amount
-        $total = $this->calculateTotal($carts);
-
-        return view('User.Layouts.cart', compact('carts', 'total'));
-    }
-
-    // ... (other methods)
-
-    // Helper method to calculate total amount
-    private function calculateTotal($carts)
-    {
-        $total = 0;
-
-        foreach ($carts as $cart) {
-            $total += $cart->price * $cart->quantity;
-        }
-
-        return $total;
-    }
-
-    public function addToCart(Request $request)
-    {
-        $menuId = $request->input('menu_id');
-        $quantity = $request->input('quantity');
-
-        // Check if the item already exists in the cart
-        $existingCartItem = Cart::where('menu_id', $menuId)->first();
-
-        if ($existingCartItem) {
-            // If the item exists, increase the quantity and update the total price
-            $existingCartItem->quantity += $quantity;
-            $existingCartItem->price += ($quantity * $existingCartItem->menu->price);
-            $existingCartItem->save();
-        } else {
-            // If the item does not exist, create a new entry in the cart
-            $cartItem = new Cart();
-            $cartItem->menu_id = $menuId;
-            $cartItem->quantity = $quantity;
-            $cartItem->price = $quantity * $cartItem->menu->price;
-            $cartItem->save();
-        }
-
-        // Redirect back or return a response as needed
+        return view('User.Layouts.cart', compact('carts'));
     }
 
     public function store(Request $request)
@@ -71,14 +31,59 @@ class CartController extends Controller
             }
 
             $quantity = $request->input('quantity', 1);
+            $price = $request->input('price');
 
-            $item = new Cart();
-            $item->quantity = $quantity;
-            $item->menu_id = $menuId;
-            $item->user_id = auth()->id();
-            $item->price = $request->input('price');
-            $item->image = $request->input('image');
-            $item->save();
+            // Check if the item already exists in the cart
+            $existingCartItem = Cart::where('user_id', auth()->id())->where('menu_id', $menuId)->first();
+
+            if ($existingCartItem) {
+                $existingCartItem->quantity += $quantity;
+                $existingCartItem->sub_total += ($price * $quantity);
+
+                // Calculate discount for existing item
+                $existingSubtotal = $existingCartItem->sub_total;
+                $discountRate = 0;
+                if ($existingSubtotal > 100) {
+                    $discountRate = 0.15; // 15% discount if subtotal > 100
+                } elseif ($existingSubtotal > 50) {
+                    $discountRate = 0.1; // 10% discount if subtotal > 50
+                } elseif ($existingSubtotal > 20) {
+                    $discountRate = 0.05; // 5% discount if subtotal > 20
+                }
+                $existingCartItem->discount = $existingSubtotal * $discountRate;
+
+                // Calculate total after discount for existing item
+                $existingCartItem->total = $existingSubtotal - $existingCartItem->discount;
+
+                $existingCartItem->save();
+            } else {
+                // Calculate subtotal
+                $subtotal = $price * $quantity;
+
+                // Calculate discount
+                $discountRate = 0;
+                if ($subtotal > 100) {
+                    $discountRate = 0.15; // 15% discount if subtotal > 100
+                } elseif ($subtotal > 50) {
+                    $discountRate = 0.1; // 10% discount if subtotal > 50
+                } elseif ($subtotal > 20) {
+                    $discountRate = 0.05; // 5% discount if subtotal > 20
+                }
+                $discount = $subtotal * $discountRate;
+
+                // Calculate total after discount
+                $total = $subtotal - $discount;
+
+                // Save the cart item with calculated values
+                $item = new Cart();
+                $item->quantity = $quantity;
+                $item->menu_id = $menuId;
+                $item->user_id = auth()->id();
+                $item->sub_total = $subtotal;
+                $item->discount = $discount;
+                $item->total = $total;
+                $item->save();
+            }
 
             return redirect()->back()->with('success', 'Item added to the cart');
         } catch (\Exception $e) {
@@ -97,11 +102,11 @@ class CartController extends Controller
             // Delete the cart item
             $cartItem->delete();
 
-            // Redirect back with a success message
-            return redirect()->back()->with('success', 'Item removed from the cart successfully.');
+            // Return a JSON response indicating success
+            return response()->json(['status' => 200, 'message' => 'Cart item deleted successfully']);
         } else {
-            // Redirect back with an error message
-            return redirect()->back()->with('error', 'Item not found in the cart.');
+            // Return a JSON response indicating failure
+            return response()->json(['status' => 400, 'error' => 'Cart item not found'], 404);
         }
     }
 }

@@ -16,8 +16,9 @@ return new class extends Migration
             $table->foreignId('menu_id')->constrained();
             $table->foreignId('user_id')->constrained();
             $table->integer('quantity')->default(0);
-            $table->string('image')->nullable();
-            $table->decimal('price', 10, 2)->default(0.00);;
+            $table->decimal('sub_total', 10, 2)->default(0.00);
+            $table->decimal('discount', 10, 2)->default(0.00);
+            $table->decimal('total', 10, 2)->default(0.00);
             $table->timestamps();
         });
     }

@@ -53,28 +53,26 @@
             <label for="menu-toggle">
                 <span class="las la-bars"></span>
             </label>
-
             <div class="header-menu">
                 <div class="user" id="logoutUser">
                     <div class="bg-img" style="background-image: url(img/1.jpeg)"></div>
-
                     <span class="las la-power-off" id="logoutIcon"></span>
                     <span>Logout</span>
                 </div>
-
-                <a href="{{ route('home') }}" class="user" id="backToHome" style="color: white;">
-                    <div class="bg-img" style="background-image: url(img/1.jpeg)"></div>
-                    <span class="las la-power-off" id="back"></span>
-                    <span>Back to Home</span>
-                </a>
-
+                <br>
+                <div>
+                    <a href="{{ route('home') }}" class="user" id="backToHome" style="color: white;">
+                        <div class="bg-img" style="background-image: url(img/1.jpeg)"></div>
+                        <span class="las la-power-off" id="back"></span>
+                        <span>Back to Home</span>
+                    </a>
+                </div>
             </div>
         </div>
     </header>
 
     <!-- Include jQuery if not already included -->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
     <script>
         $(document).ready(function () {
             $('#logoutIcon').on('click', function () {

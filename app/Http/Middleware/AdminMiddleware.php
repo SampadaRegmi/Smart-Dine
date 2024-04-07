@@ -4,30 +4,32 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 
 class AdminMiddleware
 {
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
+     * @return mixed
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next)
     {
-        $user = Auth::user();
-
-        if ($user != null) {
-            if ($user->role == "admin") {
+        // Check if the current user is authenticated
+        if (Auth::check()) {
+            // Check the role of the authenticated user
+            if (Auth::user()->role === 'admin') {
+                // If the user is an admin, allow access to the requested route
                 return $next($request);
             } else {
-                // Redirect to login or show a custom error page
-                return redirect()->route('login');
+                // If the user is not an admin, redirect them to the home page
+                return redirect('/');
             }
+        } else {
+            // If the user is not authenticated, redirect them to the login page
+            return redirect('/');
         }
-
-        // Handle the case where $user is null
-        return redirect()->route('login');
     }
 }

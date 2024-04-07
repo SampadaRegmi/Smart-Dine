@@ -41,38 +41,6 @@
                             </div>
                         </div>
 
-                        <!-- Status Field -->
-                        <div class="row mb-3">
-                            <label for="status" class="col-md-4 col-form-label text-md-end">{{ __('Status') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="status" type="number" class="form-control @error('status') is-invalid @enderror"
-                                    name="status" value="{{ old('status', 0) }}" required>
-
-                                @error('status')
-                                    <div class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </div>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <!-- Popular Field -->
-                        <div class="row mb-3">
-                            <label for="popular" class="col-md-4 col-form-label text-md-end">{{ __('Popular') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="popular" type="number" class="form-control @error('popular') is-invalid @enderror"
-                                    name="popular" value="{{ old('popular', 0) }}" required>
-
-                                @error('popular')
-                                    <div class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </div>
-                                @enderror
-                            </div>
-                        </div>
-
                         <div class="row mb-3">
                             <label for="description"
                                 class="col-md-4 col-form-label text-md-end">{{ __('Menu Description') }}</label>

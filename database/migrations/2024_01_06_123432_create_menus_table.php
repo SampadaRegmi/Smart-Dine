@@ -18,8 +18,6 @@ return new class extends Migration
             $table->string('description');
             $table->string('image')->nullable();
             $table->string('price');
-            $table->string('status');
-            $table->string('popular');
             $table->enum('FoodCategory', ['Veg', 'Non-veg']);
             $table->enum('CourseCategory', ['all','appetizers', 'entree', 'dessert', 'salads','drinks']);
             $table->timestamps();

@@ -13,6 +13,10 @@ return [
     | a conventional file to locate the various service credentials.
     |
     */
+    'khalti' => [
+        'secret_key' => env('KHALTI_SECRET_KEY'),
+        'initiate_payment_url' => env('KHALTI_INITIATE_PAYMENT_URL'),
+    ],
 
     'mailgun' => [
         'domain' => env('MAILGUN_DOMAIN'),

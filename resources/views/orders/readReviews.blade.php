@@ -90,6 +90,11 @@
     </style>
 
     <div class="container">
+        @if ($reviews->isEmpty())
+            <div style="text-align: center; font-size: 20px; margin-bottom: 20px;">
+                Sorry, there are no reviews.&#128577;
+            </div>
+        @else
         @foreach ($reviews as $review)
             <div class="review">
                 <div class="circle-rating">
@@ -105,5 +110,6 @@
                 </div>
             </div>
         @endforeach
+    @endif
     </div>
 @endsection

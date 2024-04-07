@@ -13,7 +13,7 @@ class Menu extends Model
     public const CourseCategory = ['all','appetizers', 'drinks', 'dessert', 'entree', 'salads'];
 
     protected $fillable = [
-        'name', 'keywords', 'status', 'popular', 'description', 'price', 'FoodCategory', 'CourseCategory', 'image',
+        'name', 'keywords', 'description', 'price', 'FoodCategory', 'CourseCategory', 'image',
     ];
 
     public function carts()
@@ -35,5 +35,10 @@ class Menu extends Model
     {
         return $this->hasMany(Review::class);
     }
-    
+
+    public function cart()
+    {
+        return $this->belongsTo(Cart::class);
+    }
+
 }

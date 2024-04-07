@@ -11,7 +11,8 @@
                         <th>Email</th>
                         <th>Phone</th>
                         <th>Role</th>
-                        <th>Action</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -21,17 +22,16 @@
                             <td>{{ $user->name }}</td>
                             <td>{{ $user->email }}</td>
                             <td>{{ $user->phone }}</td>
-                            <td>
-                                <img src="{{ asset($user->image) }}" alt="" height="20px">
-                            </td>
                             <td>{{ $user->role }}</td>
                             <td>
-                                <a class="btn btn-primary" href="{{ route('user.edit', $user->id) }}"
+                                <a class="btn btn-sm btn-primary pill" href="{{ route('user.edit', $user->id) }}"
                                     role="button">Edit</a>
+                            </td>
+                            <td>
                                 <form action="{{ route('user.destroy', $user->id) }}" method="post">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="btn btn-danger" type="submit">Delete</button>
+                                    <button class="btn btn-sm btn-danger" type="submit">Delete</button>
                                 </form>
                             </td>
                         </tr>

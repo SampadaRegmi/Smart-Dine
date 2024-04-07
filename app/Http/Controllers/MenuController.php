@@ -33,18 +33,16 @@ class MenuController extends Controller
             'status' => $request->input('status', 0),
             'popular' => $request->input('popular', 0),
         ]);
-    
+
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'keywords' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string', 'max:255'],
             'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,svg,gif', 'max:2048'],
             'price' => ['required', 'numeric'],
-            'status' => ['required', 'integer', 'min:0'],
-            'popular' => ['required', 'integer', 'min:0'],
             'FoodCategory' => ['required', Rule::in(Menu::FoodCategory)],
             'CourseCategory' => ['required', Rule::in(Menu::CourseCategory)],
-        ]);        
+        ]);
 
         $data = $request->all();
 
@@ -79,23 +77,16 @@ class MenuController extends Controller
     {
         $menu = Menu::findOrFail($id);
 
-        $request->merge([
-            'status' => $request->input('status', 0),
-            'popular' => $request->input('popular', 0),
-        ]);
-
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'keywords' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string', 'max:255'],
             'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,svg,gif', 'max:2048'],
             'price' => ['required', 'numeric'],
-            'status' => ['required', 'integer', 'min:0'],
-            'popular' => ['required', 'integer', 'min:0'],
             'FoodCategory' => ['required', Rule::in(Menu::FoodCategory)],
             'CourseCategory' => ['required', Rule::in(Menu::CourseCategory)],
         ]);
-        
+
 
         // Set default values for status and popular
         $data = $request->filled('status') ? $request->all() : array_merge($request->all(), ['status' => 0]);
@@ -174,7 +165,7 @@ class MenuController extends Controller
     {
         // Retrieve menu items from the database with eager loading of reviews relationship
         $menuItems = Menu::with('reviews')->get();
-        
+
         // Calculate average rating for each menu item
         $menuItems->transform(function ($menuItem) {
             $totalReviews = $menuItem->reviews->count();

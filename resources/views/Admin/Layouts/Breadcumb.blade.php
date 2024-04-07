@@ -1,11 +1,17 @@
 <div class="page-header">
-    {{-- Check if the current route name is 'admin.pages.feedback' and show the title accordingly --}}
-    @if(request()->route()->getName() === 'admin.pages.feedback')
-        <h1>Feedback</h1>
-        <small>Home / Feedback</small>
+    {{-- Check if the current route has a name --}}
+    @if(request()->route())
+        {{-- Extract the page name from the route --}}
+        @php
+            $routeName = request()->route()->getName();
+            $pageName = explode('.', $routeName);
+            $pageTitle = ucfirst(end($pageName));
+        @endphp
+        <h1>{{ $pageTitle }}</h1>
+        <small>Home / {{ $pageTitle }}</small>
     @else
-        {{-- show segment 2 as the title of breadcrumb for other pages --}}
-        <h1>{{ Str::ucfirst(Request::segment(2)) }}</h1>
-        <small>Home / {{ Str::ucfirst(Request::segment(2)) }}</small>
+        {{-- Default header if route name is not available --}}
+        <h1>Page Not Found</h1>
+        <small>Home / Page Not Found</small>
     @endif
 </div>

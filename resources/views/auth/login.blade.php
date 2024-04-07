@@ -74,18 +74,6 @@
                             class="form-control @error('password') is-invalid @enderror" name="password" id="password" required>
                         <i class="toggle-password" onclick="togglePassword(this)">&#128065;</i>
                     </div>
-
-                    <div class="mb-3">
-                        <div class="col-md-6 offset-md-4">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="remember" id="remember"
-                                    {{ old('remember') ? 'checked' : '' }}>
-                                <label class="form-check-label" for="remember">
-                                    {{ __('Remember Me') }}
-                                </label>
-                            </div>
-                        </div>
-                    </div>
                     <button type="submit" class="btn btn-primary">
                         {{ __('Login') }}
                     </button>

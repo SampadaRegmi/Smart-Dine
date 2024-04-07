@@ -13,6 +13,8 @@ class Order extends Model
     protected $fillable = [
         'user_id',
         'order_type',
+        'sub_total',
+        'discount',
         'total_amount',
         'order_details',
         'payment_status',
@@ -25,7 +27,7 @@ class Order extends Model
 
     public function menu()
     {
-        return $this->belongsToMany(Menu::class);
+        return $this->belongsTo(Menu::class);
     }
 
     public function menuItems()
@@ -33,12 +35,6 @@ class Order extends Model
         return $this->hasMany(Menu::class, 'id', 'menu_id');
     }
 
-    public function orderDetails()
-    {
-        return $this->hasMany(OrderDetail::class);
-    }
-
-   
     public function reviews()
     {
         return $this->hasMany(Review::class);

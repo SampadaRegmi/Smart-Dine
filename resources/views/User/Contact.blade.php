@@ -3,11 +3,6 @@
     <link rel="stylesheet" href="{{ asset('style.css') }}">
     <title>Contact Us</title>
     <style>
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
         /* Contact section styles */
         #contact {
             display: flex;
@@ -27,7 +22,7 @@
 
         #contact img {
             width: 100%;
-            max-width: 300px;
+            max-width: 1000px;
             padding: 10px 0;
         }
 
@@ -51,6 +46,7 @@
             width: 100%;
             padding: 10px;
             margin-bottom: 15px;
+            border-radius: 10px;
         }
 
         .button-submit {
@@ -59,18 +55,13 @@
             padding: 10px 15px;
             border: none;
             cursor: pointer;
+            border-radius: 10px;
         }
 
-        .dialog-box {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #fff;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            z-index: 1000;
+        /* Center the "Stay Connected" heading */
+        .stay-connected {
+            text-align: center;
+            margin-bottom: 20px; 
         }
 
         /* Responsive styles */
@@ -88,17 +79,12 @@
     <section id="contact">
         <!-- Phone number and address -->
         <div>
-            <h1>Feedback</h1>
             <img src="{{ asset('Images/connect.png') }}" alt="connect">
-            <h3>Phone: <span>987-654-4310</span></h3>
-            <h3>Email: <span>abc@xyz.com</span></h3>
-            <h3>Address: <span>123 Street</span></h3>
-            <h3>Fax: <span>555-444-111</span></h3>
         </div>
 
         <!-- Contact Form -->
         <div>
-            <h1>Stay Connected</h1>
+            <h1 class="stay-connected">Stay Connected</h1> <!-- Moved and centered here -->
             <form id="feedbackForm" method="post" action="{{ route('contact.submit') }}">
                 @csrf
                 <input name="name" type="text" class="form-input" placeholder="Name">
@@ -106,13 +92,6 @@
                 <textarea name="text" class="form-input" placeholder="Feedback"></textarea>
                 <button type="submit" class="button-submit">Submit</button>
             </form>
-            <!-- Warning and Success Dialog -->
-            <div id="warningDialog" class="dialog-box" style="color: red; display: none;">
-                <p>Please fill in all the fields.</p>
-            </div>
-            <div id="successDialog" class="dialog-box" style="color: green; display: none;">
-                <p>Thank you for your feedback!</p>
-            </div>
         </div>
     </section>
     <!-- Include jQuery (if not already included) -->
@@ -126,21 +105,6 @@
                 // Reference to the form
                 var form = $(this);
 
-                // Check if any field is empty
-                var hasEmptyField = false;
-                form.find('.form-input').each(function() {
-                    if ($(this).val() === '') {
-                        hasEmptyField = true;
-                        return false; // Exit the loop early
-                    }
-                });
-
-                if (hasEmptyField) {
-                    // Display warning dialog for empty fields
-                    $('#warningDialog').css('display', 'block');
-                    return; // Stop further processing
-                }
-
                 // Perform an AJAX request to submit the form data
                 $.ajax({
                     url: form.attr('action'),
@@ -149,6 +113,8 @@
                     success: function(response) {
                         // Display the success dialog
                         $('#successDialog').css('display', 'block');
+                        // Display alert message
+                        alert('Thank you for your feedback!');
                     },
                     error: function(error) {
                         console.log(error);
@@ -158,5 +124,4 @@
             });
         });
     </script>
-    <script src="{{ asset('index.js') }}"></script>
 @endsection

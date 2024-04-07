@@ -50,7 +50,7 @@ class UserController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'phone' => ['nullable', 'numeric'],
+            'phone' => ['nullable', 'string', 'max:10'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'role' => [
                 'required',
@@ -103,7 +103,7 @@ class UserController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,id,' . $user->id],
-            'phone' => ['nullable', 'numeric'],
+            'phone' => ['nullable', 'string', 'max:10'],
             'password' => ['nullable', 'string', 'min:8'],
         ]);
         // set all data from request to the variable $data
@@ -152,7 +152,7 @@ class UserController extends Controller
         $request->validate([
             'name' => 'nullable|string|max:255',
             'email' => 'nullable|email|max:255|unique:users,email,' . $id,
-            'phone' => 'nullable|string|max:20',
+            'phone' => 'nullable|string|max:10',
             'new_password' => 'nullable|string|min:8|confirmed',
         ]);
     

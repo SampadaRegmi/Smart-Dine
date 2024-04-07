@@ -7,7 +7,7 @@
     <style>
         body {
             padding: 35px 60px;
-            background-color: orange;
+            background-image: linear-gradient(to bottom right, #ff7400, #fd8b17, #ffa242, #ffc367, #f9de8a);
             height: 100vh;
             font-family: 'Poppins', sans-serif;
         }
@@ -17,12 +17,14 @@
             color: #fcfcfa;
             font-size: 1rem;
             padding: 15px 25px;
+            text-decoration:none;
+            border-radius: 20px;
         }
 
         .hero {
             display: flex;
             justify-content: space-between;
-            margin-top: 75px;
+            margin-top: 40px;
         }
 
         .right {
@@ -30,7 +32,7 @@
         }
 
         .img {
-            width: 350px;
+            width: 400px;
             height: 400px;
             background-image: url(https://images.luminati.co.uk/app/uploads/2022/06/main-4.jpg);
             background-size: cover;

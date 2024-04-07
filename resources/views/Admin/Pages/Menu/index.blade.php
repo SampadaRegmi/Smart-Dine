@@ -10,13 +10,12 @@
                         <th>Name</th>
                         <th>Description</th>
                         <th>Keywords</th>
-                        <th>Popular</th>
-                        <th>Status</th>
                         <th>Image</th>
                         <th>Price</th>
                         <th>FoodCategory </th>
                         <th>CourseCategory </th>
-                        <th>Actions</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -26,8 +25,6 @@
                             <td>{{ $menu->name }}</td>
                             <td>{{ $menu->description }}</td>
                             <td>{{ $menu->keywords }}</td>
-                            <td>{{ $menu->status }}</td>
-                            <td>{{ $menu->popular }}</td>
                             <td>
                                 <img src="{{ asset($menu->image) }}" alt="Menu Image" height="50px">
                             </td>
@@ -35,11 +32,13 @@
                             <td>{{ $menu->FoodCategory }}</td>
                             <td>{{ $menu->CourseCategory }}</td>
                             <td>
-                                <a class="btn btn-primary" href="{{ route('menu.edit', $menu->id) }}" role="button">Edit</a>
+                            <a class="btn btn-sm btn-primary pill" href="{{ route('menu.edit', $menu->id) }}" role="button">Edit</a>
+                            </td>
+                            <td>
                                 <form action="{{ route('menu.destroy', $menu->id) }}" method="post">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="btn btn-danger" type="submit">Delete</button>
+                                    <button class="btn btn-sm btn-danger pill" type="submit">Delete</button>
                                 </form>
                             </td>
                         </tr>

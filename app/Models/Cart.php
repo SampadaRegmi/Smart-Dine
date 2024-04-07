@@ -26,9 +26,13 @@ class Cart extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-    
+
     public function order()
     {
         return $this->hasOne(Order::class);
+    }
+    public function items()
+    {
+        return $this->hasMany(Menu::class);
     }
 }
